@@ -3,11 +3,18 @@ import logging
 import sys
 import heapq
 from typing import List, Tuple
+import cv2
+from openvino.runtime import Core
 
 from config import CATEGORIES, RELEVANT_FROM_CONST
 from flask_cors import CORS
 
 from flask import Flask, request, jsonify
+
+from utils.openvino_utils import detect
+from utils.draw_utils import draw_results_with_motion
+from utils.model_utils import dict_classes
+from utils.motion_finder import MotionFinder
 
 app = Flask(__name__)
 CORS(app, origins='*', resources={
@@ -16,6 +23,12 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Куча для каждого видосика
 video_chunks = {}
+
+motion_finder = MotionFinder()
+ie = Core()
+model = ie.read_model(model="weights/yolov8n_1280_ufo_best_int8_openvino_model/yolov8n_1280_ufo_best.xml")
+compiled_model = ie.compile_model(model=model, device_name="CPU")
+output_layer = compiled_model.output(0)
 
 @app.route('/upload-video', methods=['POST'])
 def upload_video():

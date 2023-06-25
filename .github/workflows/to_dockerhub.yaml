@@ -23,4 +23,6 @@ jobs:
           # context: .
           # platforms: linux/arm64/v8
           push: true
-          tags: korvalanni/hackatonn_netris:main
+          tags: korvalanni/hackaton_netris:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackatonn_netris:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackatonn_netris:buildcache,mode=max

@@ -16,6 +16,7 @@ from utils.draw_utils import draw_results_with_motion
 from utils.model_utils import dict_classes
 from utils.motion_finder import MotionFinder
 
+print(' ')
 app = Flask(__name__)
 CORS(app, origins='*', resources={
     r'*': {'origins': '*'}}, allow_headers=["Content-Type"])

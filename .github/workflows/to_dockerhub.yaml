@@ -41,5 +41,5 @@ jobs:
           # tags: korvalanni/hackaton_netris:latest
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackatonn_netris:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackatonn_netris:buildcache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackaton_netris:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackaton_netris:buildcache,mode=max

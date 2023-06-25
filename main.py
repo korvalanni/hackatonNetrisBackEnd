@@ -23,6 +23,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Куча для каждого видосика
 video_chunks = {}
+videos = dict()
 
 motion_finder = MotionFinder()
 ie = Core()
@@ -30,12 +31,13 @@ model = ie.read_model(model="weights/yolov8n_1280_ufo_best_int8_openvino_model/y
 compiled_model = ie.compile_model(model=model, device_name="CPU")
 output_layer = compiled_model.output(0)
 
+
 @app.route('/upload-video', methods=['POST'])
 def upload_video():
     if 'chunk_id' not in request.form or 'chunk' not in request.files or 'client_id' not in request.form or 'video_id' not in request.form or 'complete' not in request.form:
         return jsonify({"message": "Bad Request"}), 400
 
-    chunk_id = int(request.form.get('chunk_id')) # Должен быть int для порядка
+    chunk_id = int(request.form.get('chunk_id'))  # Должен быть int для порядка
     chunk = request.files['chunk'].read()
     client_id = request.form.get('client_id')
     video_id = request.form.get('video_id')
@@ -70,8 +72,14 @@ def get_video_chunks(video_id: str) -> List[Tuple]:
 
     # Фетч чанков закончен
     del video_chunks[video_id]
-
+    videos[id] = chunks_data
     return chunks_data
+
+
+
+def get_video_from_heap():
+    for video in videos:
+        yield videos[video]
 
 
 @app.after_request

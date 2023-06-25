@@ -23,6 +23,8 @@ jobs:
             type=ref,event=branch
             type=sha
             latest
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v1
       - name: Login to DockerHub
@@ -39,5 +41,5 @@ jobs:
           # tags: korvalanni/hackaton_netris:latest
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackatonn_netris:buildcache
-          # cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackatonn_netris:buildcache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackatonn_netris:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/hackatonn_netris:buildcache,mode=max
